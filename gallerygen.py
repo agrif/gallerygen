@@ -3,7 +3,7 @@ import os.path
 import sys
 import urllib.request
 
-from PIL import Image
+from PIL import Image, ImageFile
 import jinja2
 
 loader = jinja2.FileSystemLoader(os.path.split(__file__)[0])
@@ -79,7 +79,14 @@ if __name__ == "__main__":
         if needs_regen(img, destp):
             print('converting', name)
             im = Image.open(img)
-            im.save(destp, quality=args.quality)
+            oldm = ImageFile.MAXBLOCK
+            try:
+                im.save(destp, quality=args.quality, progressive=True)
+            except IOError:
+                ImageFile.MAXBLOCK = im.size[0] * im.size[1]
+                im.save(destp, quality=args.quality, progressive=True)
+            finally:
+                ImageFile.MAXBLOCK = oldm
         return 'img/' + tail
     env.filters['large'] = large
 
@@ -93,7 +100,7 @@ if __name__ == "__main__":
             print('thumbnailing', name)
             im = Image.open(img)
             im.thumbnail((size, size), Image.ANTIALIAS)
-            im.save(destp, quality=args.quality)
+            im.save(destp, quality=args.quality, progressive=True)
         return 'thumbs/' + tail
     env.filters['thumb'] = thumb
 
