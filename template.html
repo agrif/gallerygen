@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="generator" content="https://github.com/agrif/gallerygen">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{{ title }}{% if tagline %} - {{ tagline }}{% endif %}</title>
+
+    <script src="{{ "http://code.jquery.com/jquery-2.1.4.min.js"|grabfile }}"></script>
+    <script src="{{ "https://github.com/brutaldesign/swipebox/raw/master/src/js/jquery.swipebox.min.js"|grabfile }}"></script>
+
+    <link rel="stylesheet" href="{{ "https://raw.githubusercontent.com/necolas/normalize.css/master/normalize.css"|grabfile }}">
+    <link rel="stylesheet" href="{{ "https://github.com/brutaldesign/bagpakk/raw/master/css/bagpakk.min.css"|grabfile }}">
+    <link rel="stylesheet" href="{{ "https://github.com/brutaldesign/swipebox/raw/master/src/css/swipebox.min.css"|grabfile }}">
+
+    <!--
+        swipebox needs these in ./img/
+        {{ "https://github.com/brutaldesign/swipebox/raw/master/src/img/icons.svg"|grabfile("img") }}
+        {{ "https://github.com/brutaldesign/swipebox/raw/master/src/img/icons.png"|grabfile("img") }}
+        {{ "https://github.com/brutaldesign/swipebox/raw/master/src/img/loader.gif"|grabfile("img") }}
+      -->
+
+    <style>
+      #box-container {
+          margin: 0;
+          padding: 0;
+      }
+
+      .box {
+          list-style-type: none;
+          float: left;
+          width: 220px;
+          height: 220px;
+      }
+
+      .box img {
+          margin-left: auto;
+          margin-right: auto;
+          display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="container">
+      <div class="wrap">
+        <div class="lead text-center">
+          <h1>{{ title }}</h1>
+          {% if tagline %}
+          <p class="tagline">{{ tagline }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+    <section id="gallery" class="container">
+      <div class="wrap">
+        <ul id="box-container">
+          {% for img in images %}
+          <li class="box">
+            <a href="{{ img|large }}" class="swipebox">
+              <img src="{{ img|thumb(200) }}">
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+
+    <script type="text/javascript">
+      (function($) {
+          $('.swipebox').swipebox();
+      })(jQuery);
+    </script>
+  </body>
+</html>
+
